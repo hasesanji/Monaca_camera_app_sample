@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+  <html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script type="text/javascript" src="components/loader.js"></script>
+    <script type="text/javascript">
+    
+    document.addEventListener ("deviceready", onDeviceReady, false);
+
+    //This function is executed when Cordova loading completed.
+    function onDeviceReady () {
+        window.alert ('Loading Cordova is completed、Camera is now ready to be used.');
+    }
+
+    function snapPicture () {
+        navigator.camera.getPicture (onSuccess, onFail, 
+            { quality: 50, destinationType: Camera.DestinationType.DATA_URL});
+
+
+        //A callback function when snapping picture is success.
+        function onSuccess (imageData) {
+            var image = document.getElementById ('picture');
+            image.src = "data:image/jpeg;base64," + imageData;
+        }
+
+        //A callback function when snapping picture is fail.
+        function onFail (message) {
+            alert ('Error occured: ' + message);
+        }
+    }
+    
+    function getPhoto () {
+        //Specify the source to get the photos.
+        navigator.camera.getPicture(onSuccess, onFail, 
+          { quality: 50,destinationType: Camera.DestinationType.FILE_URI,
+          sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM });
+          
+        function onSuccess (imageURI) {
+            var largeImage = document.getElementById ('picture');
+            largeImage.style.display = 'block';
+            largeImage.src = imageURI;
+        }          
+        function onFail (message) {
+          alert('An error occured: ' + message);
+        }          
+    }
+    
+    </script>
+  </head>
+  <body>
+    <input type="button" onclick="snapPicture()" value="Take Pictures">
+    <br><br>
+    <input type="button" onclick="getPhoto();" value="Acquiring an image from a photo album">
+    <br><br>
+    <img id="picture" src="" width="200" height="200">
+    </body>
+  </html>
